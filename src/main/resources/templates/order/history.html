@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>注文履歴</title>
+    <style>
+		table {
+			width: 100%;
+			border-collapse: collapse;
+			margin-top: 1em;
+		}
+		th, td {
+			border: 1px solid #ccc;
+			padding: 0.5em;
+			text-align: left;
+		}
+		h2 {
+			margin-top: 2em;
+		}
+	</style>
+</head>
+<body>
+    <h1>注文履歴</h1>
+	
+	<div th:if="${orderItemSummaryDTOs.isEmpty()}">
+		<p>注文履歴はありません。</p>
+	</div>
+    
+	<table>
+		<thead>
+			<tr>
+				<th>メニュー名</th>
+				<th>単価</th>
+				<th>数量</th>
+				<th>注文時刻</th>
+				<th>状態</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="item : ${orderItemSummaryDTOs}">
+				<td th:text="${item.menuName}"></td>
+				<td th:text="${#numbers.formatInteger(item.priceWithoutTax, 0, 'COMMA')} + '円'"></td>
+				<td th:text="${item.quantity}"></td>
+				<td th:text="${item.createdAt}"></td>
+				<td th:text="${item.status}"></td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<p>自分自身の注文合計金額: <span th:text="${customerTotalCharge}"></span> 円</p>
+	<p>グループの注文合計金額: <span th:text="${groupTotalCharge}"></span> 円</p>
+    
+    <br>
+	<a th:href="@{/categories}">メニュー</a><br>
+	<a th:href="@{/cart/view}">カートを見る</a><br>
+	<a th:href="@{/order/history}">注文履歴</a><br>
+</body>
+</html>

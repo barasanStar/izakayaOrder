@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>未提供の注文一覧（スタッフ用）</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1em;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 0.5em;
+        }
+        h1 {
+            margin-bottom: 1em;
+        }
+    </style>
+</head>
+<body>
+    <h1>未提供の注文一覧（スタッフ用）</h1>
+
+    <div th:if="${pendingOrderDTOs.isEmpty()}">
+        <p>未提供の注文はありません。</p>
+    </div>
+
+    <table th:if="${!pendingOrderDTOs.isEmpty()}">
+        <thead>
+            <tr>
+                <th>卓番号</th>
+                <th>注文日時</th>
+                <th>メニュー名</th>
+                <th>数量</th>
+                <th>ステータス</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="item : ${pendingOrderDTOs}">
+                <td th:text="${item.tableNumber}">卓7</td>
+                <td th:text="${#temporals.format(item.createdAt, 'yyyy-MM-dd HH:mm')}">2025-06-11 15:00</td>
+                <td th:text="${item.menuName}">カレーライス</td>
+                <td th:text="${item.quantity}">1</td>
+                <td th:text="${item.status}">ORDERED</td>
+                <td>
+					<form th:action="@{/staff/order/update-status}" 
+					method="post" 
+					th:each="nextStatus : ${availableStatuses}"
+					th:if="${nextStatus} != ${item.status}">
+						<input type="hidden" name="orderItemId" th:value="${item.id}" />
+						<input type="hidden" name="status" th:value="${nextStatus}" />
+						<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+						<button type="submit" th:text="${nextStatus}">新しい状態にする</button>
+					</form>
+				</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

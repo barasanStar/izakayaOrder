@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>カート内容</title>
+    <meta charset="UTF-8" />
+</head>
+<body>
+
+<h1>カートの中身</h1>
+
+<div th:if="${cart != null and #lists.isEmpty(cart.items)}">
+    <p>カートは空です。</p>
+</div>
+
+<div th:unless="${cart != null and #lists.isEmpty(cart.items)}">
+    <table border="1">
+        <thead>
+            <tr>
+                <th>料理ID</th>
+                <th>料理名</th>
+                <th>数量</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="item : ${cart.items}">
+                <td th:text="${item.menuId}">1</td>
+                <td th:text="${menuNameMap[item.menuId]}">料理名</td>
+                <td th:text="${item.quantity}">1</td>
+                <td><a th:href="@{/cart/edit(menuId=${item.menuId})}">数量変更・削除</a></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <br>
+    <form th:action="@{/order/confirm}" method="post">
+		<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <button type="submit">注文を確定する</button>
+    </form>
+</div>
+
+<br>
+<a th:href="@{/categories}">メニュー</a><br>
+<a th:href="@{/cart/view}">カートを見る</a><br>
+<a th:href="@{/order/history}">注文履歴</a><br>
+
+</body>
+</html>

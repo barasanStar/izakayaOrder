@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>料理詳細</title>
+</head>
+<body>
+	<h1 th:text="${menu.name}">料理名</h1>
+	<p>
+		単価: <span id="unitPrice" th:text="${menu.priceWithoutTax}">150</span>円
+	</p>
+
+	<form th:action="@{/cart/add}" method="post">
+		<!-- メニューIDをhiddenで送信 -->
+		<input type="hidden" name="menuId" th:value="${menu.id}">
+		
+		<label>数量: </label>
+		<input type="number" name="quantity" id="quantity" value="1" min="1" />
+		<button type="button" onclick="changeQty(-1)">-</button>
+		<button type="button" onclick="changeQty(+1)">+</button>
+		
+		<p>小計: <span id="subtotal">0</span>円</p>
+		
+		<button type="submit">カートに入れる</button>
+	</form>
+
+	<br>
+	<a th:href="@{/categories}">メニュー</a><br>
+	<a th:href="@{/cart/view}">カートを見る</a><br>
+	<a th:href="@{/order/history}">注文履歴</a><br>
+
+	<script>
+		function changeQty(amount) {
+			const qtyInput = document.getElementById('quantity');
+			let current = parseInt(qtyInput.value);
+			if(!isNaN(current)) {
+				let newQty = Math.max(1, current + amount);
+				qtyInput.value = newQty;
+				updateSubtotal();
+			}
+		}
+		
+		function updateSubtotal() {
+			const unitPrice = parseInt(document.getElementById('unitPrice').textContent);
+			const quantity = parseInt(document.getElementById('quantity').value);
+			const subtotal = unitPrice * quantity;
+			document.getElementById('subtotal').textContent = subtotal;
+		}
+		
+		window.onload = updateSubtotal;
+	</script>
+</body>
+</html>

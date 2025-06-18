@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>人数入力</title>
+</head>
+<body>
+	<h2>いらっしゃいませ</h2>
+	
+	<form id="form" action="/staff/create" method="post">
+		<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+		<p>何名様ですか？</p>
+		<select id="numberOfPeople" name="numberOfPeople">
+			<script>
+				for (let i = 1; i <= 20; i++) {
+					document.write(`<option value="${i}">${i} 名</option>`);
+				}
+			</script>			
+		</select>
+
+		<br><br>
+
+		<p>卓番号を入力</p>
+		<select id="tableNumber" name="tableNumber">
+			<script>
+				for (let i = 1; i <= 10; i++) {
+					document.write(`<option value="${i}">${i} 卓</option>`);
+				}
+			</script>			
+		</select>
+
+		<br><br>		
+
+		<div class="action-buttons">
+			<button type="submit">確定する</button>
+			<button type="button" onclick="cancel()">キャンセル</button>
+		</div>
+	</form>
+	
+	<script>	
+		function cancel() {
+			window.location.href = "/staff/home";
+		}
+	</script>
+</body>
+</html>

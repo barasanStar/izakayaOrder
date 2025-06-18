@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h2>現在アクティブなテーブル</h2>
+	<table>
+		<thead>
+			<tr>
+		    	<th>テーブル番号</th>
+		    	<th>会計処理</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="e : ${activeVisitGroups}">
+				<td th:text="${e.tableNumber}">3</td>
+		    	<td>
+		        	<a th:href="@{/staff/settlement(visitGroupId=${e.id})}">会計する</a>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</body>
+</html>

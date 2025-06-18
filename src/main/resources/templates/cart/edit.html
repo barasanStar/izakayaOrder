@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>数量変更</title>
+</head>
+<body>
+	<h1 th:text="${menu.name}">料理名</h1>
+	<p>
+		単価: <span id="unitPrice" th:text="${menu.priceWithoutTax}">150</span>円
+	</p>
+
+	<!-- 数量変更フォーム -->
+	<form th:action="@{/cart/update}" method="post">
+		<!-- メニューIDをhiddenで送信 -->
+		<input type="hidden" name="menuId" th:value="${menu.id}">
+		<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+		<label>数量: </label>
+		<input type="number" name="quantity" id="quantity" th:value="${item.quantity}" min="1" />
+		<button type="button" onclick="changeQty(-1)">-</button>
+		<button type="button" onclick="changeQty(+1)">+</button>
+		
+		<p>小計: <span id="subtotal">0</span>円</p>
+		
+		<button type="submit">更新</button>
+	</form>
+
+	<!-- 削除フォーム -->
+	<form th:action="@{/cart/remove}" method="post" style="margin-top: 1em;">
+		<input type="hidden" name="menuId" th:value="${menu.id}" />
+		<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+		<button type="submit">削除</button>
+	</form>
+		
+	<a th:href="@{/categories}">メニュー</a><br>
+	<a th:href="@{/cart/view}">カートを見る</a><br>
+	<a th:href="@{/order/history}">注文履歴</a><br>
+
+	<script>
+		function changeQty(amount) {
+			const qtyInput = document.getElementById('quantity');
+			let current = parseInt(qtyInput.value);
+			if(!isNaN(current)) {
+				let newQty = Math.max(1, current + amount);
+				qtyInput.value = newQty;
+				updateSubtotal();
+			}
+		}
+		
+		function updateSubtotal() {
+			const unitPrice = parseInt(document.getElementById('unitPrice').textContent);
+			const quantity = parseInt(document.getElementById('quantity').value);
+			const subtotal = unitPrice * quantity;
+			document.getElementById('subtotal').textContent = subtotal;
+		}
+		
+		window.onload = updateSubtotal;
+	</script>
+</body>
+</html>

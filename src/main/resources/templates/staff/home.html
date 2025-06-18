@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>スタッフ用</title>
+</head>
+<body>
+	<p th:text="'ようこそ、' + ${name} + 'さん！'">ようこそ、スタッフ名さん！</p>
+	<a th:href="@{/categories}">メニュー</a><br>
+	<a th:href="@{/staff/active-visit-groups}">アクティブ顧客一覧</a><br>
+	<a th:href="@{/staff/unserved}">未提供の注文一覧</a><br>
+	<a th:href="@{/staff/start-visit-group}">新規来店</a><br>
+</body>
+</html>

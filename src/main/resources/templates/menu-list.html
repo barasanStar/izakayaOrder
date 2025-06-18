@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title th:text="${categoryName}">カテゴリ名</title>
+</head>
+<body>
+	<h1 th:text="${categoryName}">カテゴリ名</h1>
+	<ul>
+		<li th:each="menu : ${menus}">
+			<a th:href="@{/menus/{id}(id=${menu.id})}" th:text="${menu.name}"></a>
+		</li>
+	</ul>
+
+	<a th:href="@{/categories}">メニュー</a><br>
+	<a th:href="@{/cart/view}">カートを見る</a><br>
+	<a th:href="@{/order/history}">注文履歴</a><br>
+</body>
+</html>

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>決済</title>
+</head>
+<body>
+	<h2>テーブル番号: [[${visitGroup.tableNumber}]]</h2>
+	<p>ご注文合計: [[${totalAmount}]] 円</p>
+	
+	<form method="post" action="/staff/settle">
+	  	<input type="hidden" name="visitGroupId" th:value="${visitGroup.getId()}" />
+	  	<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+	  	<button type="submit">支払い完了</button>
+	</form>
+</body>
+</html>
