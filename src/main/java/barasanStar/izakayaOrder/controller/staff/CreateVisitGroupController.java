@@ -22,10 +22,9 @@ public class CreateVisitGroupController {
 			@RequestParam("numberOfPeople") int numberOfPeople,
 			RedirectAttributes redirectAttributes) {
 		String groupToken = visitGroupService.registerGroup(tableNumber, numberOfPeople);
-		String preURL = "http://localhost:8080/categories?groupToken=";
-		String accessURL = preURL + groupToken;
+		String baseURL = "http://localhost:8080/categories?groupToken=";
+		String accessURL = baseURL + groupToken;
 		redirectAttributes.addFlashAttribute("accessURL", accessURL);
 		return "redirect:/staff/show-QR-code";
 	}
-
 }
