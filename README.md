@@ -1,4 +1,4 @@
-# 居酒屋注文
+# 居酒屋注文システム
 
 Java + Spring Boot による Web アプリケーションです。  
 MVC構造を意識して設計・実装しています。
@@ -24,18 +24,18 @@ MVC構造を意識して設計・実装しています。
 ## ⚙️ 主な機能
 
 - お客様側機能
- - カテゴリ別メニュー閲覧
- - 商品詳細表示、カート追加
- - 注文・注文履歴閲覧
+  - カテゴリ別メニュー閲覧
+  - 商品詳細表示、カート追加
+  - 注文・注文履歴閲覧
 - スタッフ側機能
- - グループ来店登録・QRコード発行
- - 注文一覧表示（未提供フィルタあり）
- - グループ別会計処理
- - アクティブグループ管理画面
+  - グループ来店登録・QRコード発行
+  - 注文一覧表示（未提供フィルタあり）
+  - グループ別会計処理
+  - アクティブグループ管理画面
 - その他の共通機能
- - QRコード生成（Google ZXing）
- - 権限管理（Spring Security）
- - MVC構造に基づいた設計（Controller / Service / Repository 分離）
+  - QRコード生成（Google ZXing）
+  - 権限管理（Spring Security）
+  - MVC構造に基づいた設計（Controller / Service / Repository 分離）
 
 ---
 
@@ -72,8 +72,8 @@ izakayaOrder/
 ---
 
 ## 🖼️ 画面キャプチャ
-<img alt="画面キャプチャ" src="src/main/resources/readmeImage/readmeImage/01_staff_login.png" width="400px">
-<img alt="画面キャプチャ" src="src/main/resources/readmeImage/readmeImage/02_staff_login_with_data.png" width="400px">  
+<img alt="画面キャプチャ" src="src/main/resources/readmeImage/01_staff_login.png" width="400px">
+<img alt="画面キャプチャ" src="src/main/resources/readmeImage/02_staff_login_with_data.png" width="400px">  
 <img alt="画面キャプチャ" src="src/main/resources/readmeImage/03_staff_home.png" width="400px">  
 <img alt="画面キャプチャ" src="src/main/resources/readmeImage/04_staff_start_visit_group.png" width="400px">
 <img alt="画面キャプチャ" src="src/main/resources/readmeImage/05_staff_start_visit_group_with_data.png" width="400px">  
@@ -89,7 +89,6 @@ izakayaOrder/
 <img alt="画面キャプチャ" src="src/main/resources/readmeImage/15_active_group_list.png" width="420px">  
 <img alt="画面キャプチャ" src="src/main/resources/readmeImage/16_settlement.png" width="460px">
 <img alt="画面キャプチャ" src="src/main/resources/readmeImage/17_settlement_done.png" width="430px">  
-
 
 ---
 
