@@ -7,6 +7,10 @@
 <body>
 	<h1 th:text="${menu.name}">料理名</h1>
 	<p>
+		<img th:if="${menu.imageUrl != null}"
+			th:src="@{/image/{file}(file=${menu.imageUrl})}"
+			alt="画像準備中"
+			style="width:100px;height:auto"><br>
 		単価: <span id="unitPrice" th:text="${menu.priceWithoutTax}">150</span>円
 	</p>
 

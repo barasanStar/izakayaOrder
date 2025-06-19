@@ -6,11 +6,30 @@
 </head>
 <body>
 	<h1 th:text="${categoryName}">カテゴリ名</h1>
-	<ul>
-		<li th:each="menu : ${menus}">
-			<a th:href="@{/menus/{id}(id=${menu.id})}" th:text="${menu.name}"></a>
-		</li>
-	</ul>
+	
+	<table border="1">
+		<tr>
+			<th>商品画像</th>
+			<th>商品名</th>
+			<th>単価</th>
+		</tr>		
+		<tr th:each="menu : ${menus}">
+			<td>
+				<a th:if="${menu.imageUrl != null}"
+					th:href="@{/menus/{id}(id=${menu.id})}">
+					<img th:src="@{/image/{file}(file=${menu.imageUrl})}"
+						alt="画像準備中"
+						style="width:100px;height:auto">
+				</a>
+			</td>
+			<td>
+				<a th:href="@{/menus/{id}(id=${menu.id})}" th:text="${menu.name}"></a>
+			</td>
+			<td>
+				<span th:text="${menu.priceWithoutTax}">
+			</td>			
+		</tr>
+	</table>
 
 	<a th:href="@{/categories}">メニュー</a><br>
 	<a th:href="@{/cart/view}">カートを見る</a><br>
