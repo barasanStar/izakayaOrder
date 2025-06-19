@@ -23,12 +23,5 @@ public class CategoriesControllerTest {
 				.param("groupToken", "eba55700-8b86-4ad9-9242-d57eb6de390b"))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType("text/html;charset=UTF-8"));
-
-		//		List<Menu> mockMenus = List.of(new Menu("カレー", 800, true));
-		//		when(menuService.findAvailableMenus()).thenReturn(mockMenus);
-		//
-		//		mockMvc.perform(get("/menus"))
-		//				.andExpect(status().isOk())
-		//				.andExpect(content().string(containsString("カレー")));
 	}
 }

@@ -36,44 +36,95 @@ public class CustomerTokenInterceptor implements HandlerInterceptor {
 			Object handler) throws Exception {
 
 		HttpSession session = request.getSession();
-		DebugLogger.log(CustomerTokenInterceptor.class, "customerToken＝" + session.getAttribute("customerToken"));
+		// グループトークンをリクエストパラメータから取得
+		String groupToken = request.getParameter("groupToken");
+		DebugLogger.log(CustomerTokenInterceptor.class, "■■■groupToken=" + groupToken);
 
-		if (session.getAttribute("customerToken") == null) {
-			// 初回アクセス時の処理
-			String customerToken = UUID.randomUUID().toString();
-			session.setAttribute("customerToken", customerToken);
+		boolean hasGroupToken = true;
+		if (groupToken == null) {
+			hasGroupToken = false;
+		}
 
-			// VisitGroupのトークンはURLから取得
-			String groupToken = request.getParameter("groupToken");
-			Optional<VisitGroup> optionalGroup = visitGroupRepository.findByGroupToken(groupToken);
+		boolean hasCustomerToken = true;
+		Object customerTokenObj = session.getAttribute("customerToken");
+		if (customerTokenObj == null) {
+			hasCustomerToken = false;
+		}
 
-			DebugLogger.log(CustomerTokenInterceptor.class, "optionalGroup=" + optionalGroup);
-
-			if (optionalGroup.isEmpty()
-					|| !optionalGroup.get().getStatus().equals(GroupTokenStatus.ACTIVE)) {
+		if (!hasGroupToken) {
+			if (hasCustomerToken) {
+				// OK、何もしない。
+				return true;
+			} else {
+				// 不正、弾く。
 				response.sendError(HttpServletResponse.SC_FORBIDDEN, "無効なトークンです。");
 				return false;
 			}
-			VisitGroup group = optionalGroup.get();
-			DebugLogger.log(CustomerTokenInterceptor.class, "■初回確認■group=" + group);
+		} else {
+			// 【ここに入ってくるということは、groupTokenを持っている】
+			if (!validityGroupToken(groupToken)) {
+				// 不正、弾く。
+				response.sendError(HttpServletResponse.SC_FORBIDDEN, "無効なトークンです。");
+				return false;
+			} else {
+				// 【ここに入ってくるということは、有効なgroupToken】
+				Optional<VisitGroup> optionalGroup = visitGroupRepository.findByGroupToken(groupToken);
+				VisitGroup group = optionalGroup.get();
 
-			// Customer登録
-			Customer customer = new Customer();
-			customer.setCustomerToken(customerToken);
-			customer.setVisitGroup(group);
-			customerRepository.save(customer);
+				if (hasCustomerToken) {
+					String customerToken = (String) customerTokenObj;
+					Optional<Long> optionalGroupId = customerRepository
+							.findActiveVisitGroupIdByCustomerToken(customerToken);
 
-			session.setAttribute("customerId", customer.getId());
-			session.setAttribute("customerToken", customerToken);
-			session.setAttribute("tableNumber", group.getTableNumber());
-			session.setAttribute("visitGroupId", group.getId());
-
-			DebugLogger.log(CustomerTokenInterceptor.class, "■■■初回のアクセス");
-			DebugLogger.log(CustomerTokenInterceptor.class, "■■■customer: " + customer);
-			DebugLogger.log(CustomerTokenInterceptor.class, "■■■customerToken: " + customerToken);
-			DebugLogger.log(CustomerTokenInterceptor.class, "■■■groupToken: " + groupToken);
+					if (optionalGroupId.isPresent()) {
+						Long groupIdRelatedByCustomerToken = optionalGroupId.get();
+						long groupId = group.getId();
+						// customerTokenとgroupTokenのgroupID整合性が取れていればOK
+						if (groupId == groupIdRelatedByCustomerToken) {
+							// OK、何もしない。
+							return true;
+						} else {
+							// groupTokenを正として、customerTokenを再発行
+							registerCustomer(group, session);
+							return true;
+						}
+					} else {
+						// groupTokenを正として、customerTokenを再発行
+						registerCustomer(group, session);
+						return true;
+					}
+				} else {
+					// customerTokenを発行
+					registerCustomer(group, session);
+					return true;
+				}
+			}
 		}
+	}
 
-		return true; // 通常の処理へ進む
+	private void registerCustomer(VisitGroup group, HttpSession session) {
+		Customer customer = new Customer();
+		String customerToken = UUID.randomUUID().toString();
+		customer.setCustomerToken(customerToken);
+		customer.setVisitGroup(group);
+		customerRepository.save(customer);
+		session.setAttribute("customerId", customer.getId());
+		session.setAttribute("visitGroupId", group.getId());
+		session.setAttribute("customerToken", customerToken);
+		DebugLogger.log(CustomerTokenInterceptor.class, "■■■顧客登録");
+		DebugLogger.log(CustomerTokenInterceptor.class, "■■■customer: " + customer);
+		DebugLogger.log(CustomerTokenInterceptor.class, "■■■customerToken: " + customerToken);
+	}
+
+	// グループトークンの有効/無効を判定
+	private boolean validityGroupToken(String groupToken) {
+		Optional<VisitGroup> optionalGroup = visitGroupRepository.findByGroupToken(groupToken);
+		if (optionalGroup.isEmpty()) {
+			return false;
+		}
+		if (!optionalGroup.get().getStatus().equals(GroupTokenStatus.ACTIVE)) {
+			return false;
+		}
+		return true;
 	}
 }
