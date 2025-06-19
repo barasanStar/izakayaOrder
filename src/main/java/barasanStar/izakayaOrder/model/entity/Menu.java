@@ -37,7 +37,7 @@ public class Menu {
 	@JoinColumn(name = "category_id")
 	private Category category;
 
-	private String image_url;
+	private String imageUrl;
 	private boolean isAvailable;
 
 	@Column(insertable = false, updatable = false)
