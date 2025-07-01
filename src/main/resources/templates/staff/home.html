@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 	<meta charset="UTF-8">
 	<title>スタッフ用</title>
@@ -10,5 +11,9 @@
 	<a th:href="@{/staff/active-visit-groups}">アクティブ顧客一覧</a><br>
 	<a th:href="@{/staff/unserved}">未提供の注文一覧</a><br>
 	<a th:href="@{/staff/start-visit-group}">新規来店</a><br>
+
+    <div th:if="${isSenior}">
+        <p>この情報はシニア権限ユーザーのみに表示されます。</p>
+    </div>
 </body>
 </html>

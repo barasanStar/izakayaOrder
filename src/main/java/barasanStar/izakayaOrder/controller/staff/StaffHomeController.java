@@ -15,6 +15,9 @@ public class StaffHomeController {
 	@GetMapping("/home")
 	public String showStaffHome(Model model, @AuthenticationPrincipal StaffDetails staffDetails) {
 		model.addAttribute("name", staffDetails.getDisplayName());
+		boolean isSenior = staffDetails.getAuthorities().stream()
+				.anyMatch(auth -> auth.getAuthority().equals("SENIOR"));
+		model.addAttribute("isSenior", isSenior);
 		return "staff/home";
 	}
 }

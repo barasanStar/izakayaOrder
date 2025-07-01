@@ -28,6 +28,13 @@ public class InitialAdminLoader implements CommandLineRunner {
 			staffRepository.save(admin);
 			DebugLogger.log(InitialAdminLoader.class, "■初期ADMINアカウントを作成しました。");
 
+			Staff senior = new Staff();
+			senior.setName("senior1");
+			senior.setAccess(AccessRole.SENIOR);
+			senior.setPassword(passwordEncoder.encode("senior1"));
+			staffRepository.save(senior);
+			DebugLogger.log(InitialAdminLoader.class, "■senior1アカウントを作成しました。");
+
 			Staff staff = new Staff();
 			staff.setName("staff1");
 			staff.setAccess(AccessRole.STAFF);

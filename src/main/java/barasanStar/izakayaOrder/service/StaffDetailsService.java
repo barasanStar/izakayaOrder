@@ -21,13 +21,6 @@ public class StaffDetailsService implements UserDetailsService {
 		Staff staff = staffRepository.findByName(name)
 				.orElseThrow(() -> new UsernameNotFoundException("該当スタッフが見つかりません"));
 
-		//		return User.builder()
-		//				.username(staff.getName())
-		//				.password(staff.getPassword())
-		//				.authorities(staff.getAccess().name())
-		//				.disabled(!staff.isActive())
-		//				.build();
-
 		return new StaffDetails(staff);
 	}
 }
